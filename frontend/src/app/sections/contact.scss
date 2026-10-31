@@ -1,0 +1,135 @@
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2.5rem, 6vw, 6rem);
+}
+
+h2 {
+  margin-top: 1rem;
+  font-size: clamp(2.75rem, 5vw, 4.5rem);
+}
+
+.contact-intro {
+  max-width: 27rem;
+  margin-top: 1.75rem;
+  color: var(--muted-on-dark);
+}
+
+.contact-button {
+  margin-top: 1.75rem;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--ink);
+
+  &:hover {
+    background: #e0f6b1;
+  }
+}
+
+.contact-details {
+  min-width: 0;
+  border-top: 1px solid #57705d;
+  padding-top: 1.75rem;
+}
+
+.email-address {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  color: var(--on-dark);
+  font-size: clamp(1rem, 1.75vw, 1.4rem);
+  line-height: 1.6;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.copy-button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--muted-on-dark);
+  font-size: 0.75rem;
+
+  &:hover {
+    color: var(--accent);
+  }
+}
+
+.copy-status {
+  min-height: 2.75rem;
+  max-width: 27rem;
+  padding-top: 0.25rem;
+  color: var(--accent);
+  font-size: 0.75rem;
+}
+
+.contact-other {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-top: 1px solid #57705d;
+  padding-top: 1rem;
+
+  .text-link {
+    font-size: 0.8125rem;
+  }
+}
+
+.contact-location {
+  color: var(--muted-on-dark);
+  font-size: 0.75rem;
+}
+
+.privacy-note {
+  max-width: 28rem;
+  margin-top: 1.25rem;
+  color: var(--muted-on-dark);
+  font-size: 0.6875rem;
+}
+
+@media (max-width: 800px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .email-address {
+    font-size: clamp(1rem, 3.5vw, 1.5rem);
+  }
+}
+
+@media print {
+  .dark-surface {
+    background: #fff;
+    color: #000;
+  }
+
+  .contact-button,
+  .copy-button,
+  .copy-status {
+    display: none;
+  }
+
+  .email-address,
+  .contact-intro,
+  .eyebrow,
+  .privacy-note,
+  .contact-location {
+    color: #000;
+  }
+}

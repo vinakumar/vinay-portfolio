@@ -1,0 +1,106 @@
+<section id="home" class="hero container" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <p class="eyebrow hero-eyebrow">
+      <span aria-hidden="true"></span>{{ profile.name }} / {{ profile.role }}
+    </p>
+    <h1 id="hero-title" tabindex="-1">
+      Engineering,<br /><em class="editorial">with intention.</em>
+    </h1>
+    <p class="hero-intro">
+      I'm Vinay. I build .NET services, connect distributed systems, and work through the details
+      that keep enterprise applications running.
+    </p>
+    <div class="hero-actions">
+      <a class="button" routerLink="/" fragment="work"
+        >Explore my work <app-icon name="arrow-right"
+      /></a>
+      <a class="text-link" routerLink="/" fragment="experience"
+        >The experience behind it <app-icon name="arrow-up-right"
+      /></a>
+    </div>
+    <p class="hero-location">
+      <span class="location-symbol" aria-hidden="true"></span>Based in {{ profile.location }}
+    </p>
+  </div>
+  <figure class="practice-card dark-surface">
+    <div class="practice-heading">
+      <span class="eyebrow">A connected practice</span>
+      <span class="practice-cross" aria-hidden="true">+</span>
+    </div>
+    <svg
+      class="practice-map"
+      width="360"
+      height="274"
+      viewBox="0 0 360 274"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <g class="map-grid">
+        <path
+          d="M30 30h300M30 84h300M30 138h300M30 192h300M30 246h300M45 16v244M99 16v244M153 16v244M207 16v244M261 16v244M315 16v244"
+        />
+      </g>
+      <g class="map-connections">
+        <path d="M96 88v96h65M200 80h73v97M204 197h55M200 80v55M199 135H95" />
+        <circle cx="96" cy="135" r="4" />
+        <circle cx="273" cy="135" r="4" />
+      </g>
+      <g class="map-node">
+        <rect x="47" y="41" width="96" height="65" rx="5" />
+        <text x="95" y="69" class="node-label" text-anchor="middle">API</text>
+        <text x="95" y="88" class="node-caption" text-anchor="middle">THE CONTRACT</text>
+      </g>
+      <g class="map-node map-node-accent">
+        <rect x="157" y="159" width="93" height="68" rx="5" />
+        <text x="203" y="189" class="node-label" text-anchor="middle">Data</text>
+        <text x="203" y="208" class="node-caption" text-anchor="middle">THE CONTEXT</text>
+      </g>
+      <g class="map-node">
+        <rect x="215" y="41" width="103" height="65" rx="5" />
+        <text x="267" y="69" class="node-label" text-anchor="middle">Cloud</text>
+        <text x="267" y="88" class="node-caption" text-anchor="middle">THE DELIVERY</text>
+      </g>
+      <circle class="map-endpoint" cx="96" cy="198" r="8" />
+      <path class="map-connections" d="M96 188v20M86 198h20" />
+      <text x="278" y="246" class="map-annotation">BUILD. OBSERVE.</text>
+    </svg>
+    <figcaption>
+      <span>From the API<br />to production.</span>
+      <span class="practice-note">Different layers.<br />One engineering mindset.</span>
+    </figcaption>
+  </figure>
+</section>
+
+<div class="container practice-strip" aria-label="Principal technical strengths">
+  <div><span class="eyebrow">Build</span><span>C# &amp; .NET</span></div>
+  <div><span class="eyebrow">Connect</span><span>APIs &amp; messaging</span></div>
+  <div><span class="eyebrow">Deliver</span><span>Azure &amp; AWS</span></div>
+  <a routerLink="/" fragment="expertise">Explore the toolkit <app-icon name="arrow-right" /></a>
+</div>
+
+<section id="work" class="section container" aria-labelledby="work-title">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">01 / Selected work</span>
+      <h2 id="work-title" tabindex="-1">Engineering in context.</h2>
+    </div>
+    <p>
+      A look at the work behind the role. High-level snapshots of professional projects and my
+      contributions.
+    </p>
+  </div>
+  <div class="project-grid">
+    @for (project of projects; track project.slug) {
+      <app-project-card [project]="project" />
+    }
+  </div>
+  <p class="work-note">
+    Professional work, shared at a high level. Client details and proprietary implementations stay
+    private.
+  </p>
+</section>
+
+<app-experience />
+<app-expertise />
+<app-about />
+<app-contact />

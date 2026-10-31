@@ -1,0 +1,46 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a
+      class="identity"
+      routerLink="/"
+      fragment="home"
+      (click)="closeMenu()"
+      aria-label="Vinay Kumar, home"
+    >
+      <span class="monogram" aria-hidden="true">vk<span>.</span></span>
+      <span class="identity-name">{{ profile.name }}<span>Software Engineer</span></span>
+    </a>
+    <button
+      #menuToggle
+      class="menu-toggle"
+      type="button"
+      aria-controls="primary-navigation"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu()"
+    >
+      {{ menuOpen() ? 'Close' : 'Menu' }}
+      <app-icon [name]="menuOpen() ? 'close' : 'menu'" />
+    </button>
+    <nav
+      id="primary-navigation"
+      class="primary-nav"
+      [class.is-open]="menuOpen()"
+      aria-label="Primary navigation"
+    >
+      @for (section of sections; track section.id) {
+        <a
+          routerLink="/"
+          [fragment]="section.id"
+          [attr.aria-current]="activeSection() === section.id ? 'location' : null"
+          [class.contact-link]="section.id === 'contact'"
+          (click)="closeMenu()"
+        >
+          {{ section.label }}
+          @if (section.id === 'contact') {
+            <app-icon name="arrow-up-right" />
+          }
+        </a>
+      }
+    </nav>
+  </div>
+</header>

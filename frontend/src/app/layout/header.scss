@@ -1,0 +1,151 @@
+:host {
+  position: sticky;
+  z-index: 30;
+  top: 0;
+  display: block;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.header-inner {
+  display: flex;
+  min-height: 88px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.identity {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.8rem;
+  text-decoration: none;
+}
+
+.monogram {
+  display: flex;
+  width: 2.65rem;
+  height: 2.65rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.09em;
+  line-height: 1;
+
+  span {
+    color: #538043;
+  }
+}
+
+.identity-name {
+  font-size: 0.875rem;
+  font-weight: 550;
+  line-height: 1.5;
+
+  span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.6875rem;
+    font-weight: 400;
+  }
+}
+
+.primary-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.3vw, 2rem);
+
+  a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.8125rem;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a[aria-current] {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.5em;
+  }
+
+  .contact-link {
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding-inline: 1rem;
+  }
+}
+
+.menu-toggle {
+  display: none;
+  min-width: 5.5rem;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 800px) {
+  .header-inner {
+    position: relative;
+    min-height: 76px;
+    gap: 1rem;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .primary-nav {
+    position: absolute;
+    inset: 100% calc(var(--gutter) * -1) auto;
+    display: none;
+    align-items: stretch;
+    gap: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 0.75rem var(--gutter) 1.5rem;
+    background: var(--paper);
+    box-shadow: 0 16px 18px rgb(23 47 45 / 6%);
+
+    &.is-open {
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      min-height: 3.1rem;
+      border-bottom: 1px solid var(--line);
+      font-size: 1rem;
+    }
+
+    .contact-link {
+      justify-content: space-between;
+      margin-top: 0.75rem;
+      background: var(--sage);
+    }
+  }
+}
+
+@media (max-width: 359px) {
+  .identity-name span {
+    display: none;
+  }
+
+  .identity {
+    gap: 0.6rem;
+  }
+}

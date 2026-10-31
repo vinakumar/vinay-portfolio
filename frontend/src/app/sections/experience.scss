@@ -1,0 +1,128 @@
+.experience-section {
+  border-block: 1px solid var(--line);
+  background: #eff1e8;
+}
+
+.experience-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr);
+  align-items: start;
+  gap: clamp(3rem, 8vw, 7rem);
+}
+
+.experience-intro {
+  position: sticky;
+  top: 8rem;
+
+  h2 {
+    margin-block: 1rem 1.5rem;
+    font-size: clamp(2.1rem, 3.5vw, 3.25rem);
+  }
+
+  p {
+    max-width: 24rem;
+    color: var(--muted);
+  }
+}
+
+.career-start {
+  display: block;
+  max-width: 17rem;
+  margin-top: 2rem;
+  border-left: 2px solid #8da776;
+  padding-left: 1rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  line-height: 1.8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timeline {
+  margin: 0;
+  padding-left: 1.9rem;
+  list-style: none;
+
+  > li {
+    position: relative;
+    border-left: 1px solid #b3c0a9;
+    padding: 0 0 3.25rem 2rem;
+
+    &::before {
+      position: absolute;
+      top: 3px;
+      left: -5px;
+      width: 9px;
+      height: 9px;
+      border: 2px solid #a6b897;
+      border-radius: 50%;
+      background: #eff1e8;
+      content: '';
+    }
+
+    &:first-child::before {
+      border-color: var(--ink);
+      background: var(--ink);
+    }
+
+    &:last-child {
+      border-color: transparent;
+      padding-bottom: 0;
+    }
+  }
+
+  h3 {
+    margin-top: 0.75rem;
+  }
+}
+
+.timeline-date {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+}
+
+.role {
+  margin-top: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.summary {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.highlights {
+  margin-block: 1rem 1.4rem;
+  padding-left: 1rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+
+  li {
+    padding-left: 0.3rem;
+    margin-block: 0.5rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .experience-layout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .experience-intro {
+    position: static;
+  }
+
+  .timeline {
+    padding-left: 4px;
+
+    > li {
+      padding-left: 1.4rem;
+    }
+  }
+}

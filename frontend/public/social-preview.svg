@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f7f7f0"/>
+  <path d="M80 90h1040M80 530h1040" stroke="#cdd4c8"/>
+  <text x="80" y="65" fill="#53635b" font-family="Arial, sans-serif" font-size="18" letter-spacing="4">VINAY KUMAR / SENIOR SOFTWARE ENGINEER</text>
+  <text x="80" y="250" fill="#17312e" font-family="Arial, sans-serif" font-size="87" letter-spacing="-4">Engineering,</text>
+  <text x="80" y="355" fill="#17312e" font-family="Georgia, serif" font-size="90" font-style="italic" letter-spacing="-4">with intention.</text>
+  <text x="82" y="438" fill="#53635b" font-family="Arial, sans-serif" font-size="26">.NET / APIs / Distributed systems / Cloud</text>
+  <rect x="875" y="165" width="195" height="260" rx="8" fill="#17312e"/>
+  <rect x="910" y="210" width="105" height="105" rx="12" fill="none" stroke="#91a980" transform="rotate(-20 962 263)"/>
+  <rect x="935" y="240" width="105" height="105" rx="12" fill="none" stroke="#d5ee9c" transform="rotate(-20 987 293)"/>
+  <circle cx="973" cy="274" r="15" fill="#d5ee9c"/>
+  <text x="80" y="580" fill="#53635b" font-family="Arial, sans-serif" font-size="20">SELECTED WORK &amp; PROFESSIONAL EXPERIENCE</text>
+</svg>

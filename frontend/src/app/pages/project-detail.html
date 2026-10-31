@@ -1,0 +1,98 @@
+@if (project(); as work) {
+  <article class="project-detail">
+    <header class="container project-heading">
+      <a class="text-link back-link" routerLink="/" fragment="work"
+        ><app-icon name="arrow-right" />Back to selected work</a
+      >
+      <div class="project-title-row">
+        <div>
+          <p class="eyebrow">Selected work / {{ work.number }} / {{ work.category }}</p>
+          <h1 tabindex="-1">{{ work.title }}</h1>
+          <p class="project-lead">{{ work.summary }}</p>
+        </div>
+        <span class="project-number" aria-hidden="true">{{ work.number }}<span>/ WORK</span></span>
+      </div>
+      <dl class="project-meta">
+        <div>
+          <dt>Organization</dt>
+          <dd>{{ work.employer }}</dd>
+        </div>
+        <div>
+          <dt>Role</dt>
+          <dd>{{ work.role }}</dd>
+        </div>
+        <div>
+          <dt>Period</dt>
+          <dd>{{ work.period }}</dd>
+        </div>
+      </dl>
+    </header>
+    <div class="project-body container">
+      <div class="contribution">
+        <section aria-labelledby="context-title">
+          <span class="eyebrow">The context</span>
+          <h2 id="context-title">What the work involved.</h2>
+          <p>{{ work.context }}</p>
+        </section>
+        <section aria-labelledby="contribution-title">
+          <span class="eyebrow">My contribution</span>
+          <h2 id="contribution-title">Where I put the work in.</h2>
+          <ol class="contribution-list">
+            @for (contribution of work.contributions; track contribution) {
+              <li>{{ contribution }}</li>
+            }
+          </ol>
+        </section>
+        <section class="focus-panel" aria-labelledby="focus-title">
+          <span class="eyebrow">The engineering focus</span>
+          <h2 id="focus-title">{{ work.focus }}</h2>
+        </section>
+      </div>
+      <aside class="project-sidebar" aria-label="Project technologies and information boundary">
+        <h2>The toolkit</h2>
+        <ul class="tags" aria-label="Project technologies">
+          @for (technology of work.technologies; track technology) {
+            <li>{{ technology }}</li>
+          }
+        </ul>
+        @if (work.links.length > 0) {
+          <div class="project-links">
+            @for (link of work.links; track link.url) {
+              <a class="text-link" [href]="link.url" target="_blank" rel="noopener noreferrer">
+                {{ link.label }} <app-icon name="arrow-up-right" /><span class="sr-only">
+                  (new tab)</span
+                >
+              </a>
+            }
+          </div>
+        }
+        <div class="disclosure">
+          <span class="eyebrow">A note on professional work</span>
+          <p>
+            This is a high-level contribution summary. Internal architecture, client details, and
+            proprietary implementations are intentionally kept private.
+          </p>
+          @if (work.links.length === 0) {
+            <p>No public repository or demo is linked for this work.</p>
+          }
+        </div>
+        <a class="text-link" routerLink="/" fragment="contact"
+          >Start a conversation <app-icon name="arrow-up-right"
+        /></a>
+      </aside>
+    </div>
+    @if (nextProject(); as next) {
+      <div class="container">
+        <a class="next-project" [routerLink]="['/work', next.slug]">
+          <span
+            ><span class="eyebrow">Next / Selected work {{ next.number }}</span
+            ><span class="next-title">{{ next.title }}</span></span
+          >
+          <app-icon name="arrow-right" />
+        </a>
+      </div>
+    }
+  </article>
+} @else {
+  <app-not-found />
+}

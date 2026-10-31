@@ -1,0 +1,240 @@
+.project-heading {
+  padding-block: 2rem 0;
+}
+
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+
+  app-icon {
+    transform: rotate(180deg);
+  }
+
+  &:hover {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+}
+
+.project-title-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 3rem;
+  padding-block: 3.5rem;
+}
+
+h1 {
+  max-width: 48rem;
+  margin-top: 1.25rem;
+  font-size: clamp(2.5rem, 5vw, 4.75rem);
+  letter-spacing: -0.055em;
+}
+
+.project-lead {
+  max-width: 40rem;
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 1.125rem;
+}
+
+.project-number {
+  display: flex;
+  width: 10rem;
+  height: 10rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #aebe9c;
+  border-radius: 50%;
+  background: var(--sage);
+  color: #4a6346;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 4rem;
+  font-style: italic;
+  line-height: 1;
+
+  span {
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-style: normal;
+  }
+}
+
+.project-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+  margin: 0;
+  border-block: 1px solid var(--line);
+  padding-block: 1.75rem;
+
+  dt {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+}
+
+.project-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.75fr);
+  align-items: start;
+  gap: clamp(3rem, 7vw, 7rem);
+  padding-block: 4rem;
+}
+
+.contribution {
+  section + section {
+    margin-top: 3.5rem;
+  }
+
+  h2 {
+    margin-top: 0.75rem;
+    font-size: clamp(1.65rem, 3vw, 2.2rem);
+  }
+
+  p {
+    margin-top: 1.25rem;
+    color: var(--muted);
+  }
+}
+
+.contribution-list {
+  margin: 1.5rem 0 0;
+  padding-left: 1.5rem;
+  color: var(--muted);
+
+  li {
+    padding-left: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  li::marker {
+    color: var(--accent-ink);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+}
+
+.contribution .focus-panel {
+  border-left: 2px solid #6b875a;
+  padding-left: 1.5rem;
+
+  h2 {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    letter-spacing: -0.025em;
+    text-wrap: pretty;
+  }
+}
+
+.project-sidebar {
+  position: sticky;
+  top: 8rem;
+
+  h2 {
+    margin-bottom: 1.25rem;
+    font-size: 1.25rem;
+    letter-spacing: -0.025em;
+  }
+}
+
+.project-links {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
+
+.disclosure {
+  margin-block: 2rem 1rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+
+  p {
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+}
+
+.next-project {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-block: 1rem 3rem;
+  border-block: 1px solid var(--line);
+  padding-block: 2rem;
+  text-decoration: none;
+
+  &:hover .next-title {
+    text-decoration: underline;
+  }
+
+  > app-icon {
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+  }
+}
+
+.next-title {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: clamp(1.1rem, 3vw, 1.75rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+}
+
+@media (max-width: 800px) {
+  .project-title-row {
+    gap: 1.5rem;
+  }
+
+  .project-number {
+    width: 7rem;
+    height: 7rem;
+    font-size: 3rem;
+  }
+
+  .project-body {
+    grid-template-columns: 1fr;
+  }
+
+  .project-sidebar {
+    position: static;
+    max-width: 38rem;
+  }
+}
+
+@media (max-width: 550px) {
+  .project-title-row {
+    grid-template-columns: 1fr;
+    padding-block: 2.5rem;
+  }
+
+  .project-number {
+    display: none;
+  }
+
+  .project-meta {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .project-lead {
+    font-size: 1rem;
+  }
+}
