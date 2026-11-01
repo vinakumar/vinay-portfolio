@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { readFile, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import settings from '../src/app/content/site-settings.json';
 import { profile, projects } from '../src/app/content/portfolio';
 import type { SiteSettings } from '../src/app/content/site-settings';
@@ -55,6 +56,7 @@ async function assertAccessible(page: Page): Promise<void> {
 for (const width of [320, 375, 768, 1024, 1440]) {
   test(`homepage layout, assets, accessibility, and navigation at ${width}px`, async ({
     page,
+    baseURL,
   }, testInfo) => {
     await page.setViewportSize({ width, height: 1000 });
     const errors: string[] = [];
@@ -69,7 +71,7 @@ for (const width of [320, 375, 768, 1024, 1440]) {
       if (response.status() >= 400) failures.push(`${response.status()} ${response.url()}`);
     });
     page.on('request', (request) => {
-      if (!request.url().startsWith('http://127.0.0.1:4173')) remoteRequests.push(request.url());
+      if (!request.url().startsWith(`${baseURL}/`)) remoteRequests.push(request.url());
     });
     await openHome(page);
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Engineering,');
@@ -257,32 +259,46 @@ test('clipboard denial never displays a false success and keeps the direct conta
   );
 });
 
-test('resume is either a real approved PDF download or an honest email request', async ({
-  page,
-  request,
-}) => {
-  await openHome(page);
-  const resume = (settings as SiteSettings).resume;
-  if (resume) {
+for (const width of [320, 1440]) {
+  test(`approved resume downloads unchanged from the hero and About at ${width}px`, async ({
+    page,
+    request,
+  }, testInfo) => {
+    await page.setViewportSize({ width, height: 1000 });
+    await openHome(page);
+    const resume = (settings as SiteSettings).resume;
+    if (!resume?.publicUseApproved) {
+      throw new Error('This journey requires the owner-approved public resume.');
+    }
+    const approvedPdf = await readFile(
+      resolve(testInfo.project.testDir, '..', 'public', resume.assetPath),
+    );
     const response = await request.get(`/${resume.assetPath}`);
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toContain('application/pdf');
-    const downloading = page.waitForEvent('download');
-    await page.getByRole('link', { name: /Download resume/ }).click();
-    const download = await downloading;
-    expect(download.suggestedFilename()).toBe(resume.downloadName);
-    const path = await download.path();
-    expect(path).not.toBeNull();
-    expect((await readFile(path as string)).subarray(0, 5).toString()).toBe('%PDF-');
-  } else {
-    await expect(page.locator('a[download]')).toHaveCount(0);
-    await expect(page.getByRole('link', { name: 'Request my resume' })).toHaveAttribute(
-      'href',
-      /^mailto:.*subject=Request%20for%20your%20resume$/,
-    );
-    expect((await request.get('/resume/Vinay_Kumar_Resume.pdf')).status()).toBe(404);
-  }
-});
+    expect((await response.body()).equals(approvedPdf)).toBe(true);
+    await expect(page.getByRole('link', { name: 'Request my resume' })).toHaveCount(0);
+
+    for (const section of ['#home', '#about']) {
+      const link = page.locator(section).getByRole('link', { name: /Download resume/ });
+      await expect(link).toBeVisible();
+      const downloading = page.waitForEvent('download');
+      await link.click();
+      const download = await downloading;
+      expect(await download.failure()).toBeNull();
+      expect(download.suggestedFilename()).toBe(resume.downloadName);
+      const path = await download.path();
+      expect(path).not.toBeNull();
+      const downloadedPdf = await readFile(path as string);
+      expect(downloadedPdf.subarray(0, 5).toString()).toBe('%PDF-');
+      expect(downloadedPdf.equals(approvedPdf), 'Download must preserve the approved PDF').toBe(
+        true,
+      );
+      await expect(page).toHaveURL('/');
+    }
+    await assertNoOverflow(page);
+  });
+}
 
 test('reduced motion removes entrance animations and smooth scrolling', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -295,17 +311,28 @@ test('reduced motion removes entrance animations and smooth scrolling', async ({
   );
 });
 
-test('prerendered content and native links work without JavaScript', async ({ browser }) => {
+test('prerendered content and native links work without JavaScript', async ({
+  browser,
+  baseURL,
+}) => {
   const context = await browser.newContext({
+    baseURL,
     javaScriptEnabled: false,
     viewport: { width: 375, height: 900 },
   });
   try {
     const page = await context.newPage();
-    await page.goto('http://127.0.0.1:4173/', { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'networkidle' });
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Engineering,');
     await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Copy email address' })).toBeHidden();
+    const resumeLink = page.locator('#home').getByRole('link', { name: /Download resume/ });
+    await resumeLink.focus();
+    const downloading = page.waitForEvent('download');
+    await page.keyboard.press('Enter');
+    const download = await downloading;
+    expect(await download.failure()).toBeNull();
+    expect(download.suggestedFilename()).toBe((settings as SiteSettings).resume?.downloadName);
     await page.getByRole('link', { name: 'Enterprise asset management', exact: true }).click();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Enterprise asset management');
   } finally {
@@ -410,15 +437,27 @@ test('self-hosted fonts load without substantial layout shift', async ({ page },
   expect(metrics.cls).toBeLessThan(0.1);
 });
 
-test('the mobile disclosure works with touch input', async ({ browser }) => {
+test('the mobile resume download and disclosure work with touch input', async ({
+  browser,
+  baseURL,
+}) => {
   const context = await browser.newContext({
+    baseURL,
     viewport: { width: 375, height: 812 },
     isMobile: true,
     hasTouch: true,
   });
   try {
     const page = await context.newPage();
-    await page.goto('http://127.0.0.1:4173/', { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const downloading = page.waitForEvent('download');
+    await page
+      .locator('#home')
+      .getByRole('link', { name: /Download resume/ })
+      .tap();
+    const download = await downloading;
+    expect(await download.failure()).toBeNull();
+    expect(download.suggestedFilename()).toBe((settings as SiteSettings).resume?.downloadName);
     await page.getByRole('button', { name: 'Menu', exact: true }).tap();
     const nav = page.getByRole('navigation', { name: 'Primary navigation' });
     await expect(nav).toBeVisible();

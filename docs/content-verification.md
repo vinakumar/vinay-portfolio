@@ -1,18 +1,18 @@
 # Content verification
 
-Source of truth: the owner's two-page `Vinay_Kumar_Resume.pdf`, provided locally and read on 31 October 2026. It has not been uploaded to a document extraction service, copied into this repository, or published.
+Source of truth: the owner's two-page `Vinay_Kumar_Resume.pdf`, provided locally and read on 31 October 2026. It has not been uploaded to a document extraction service. The owner subsequently explicitly requested that this exact PDF be copied into the project, made downloadable, and pushed to the public repository.
 
-Source file: `Vinay_Kumar_Resume.pdf` (70,810 bytes), kept outside the repository. Its SHA-256 was recorded locally:
+The original source file remains unchanged outside the repository. Its byte-identical public copy is `frontend\public\resume\Vinay_Kumar_Resume.pdf` (70,810 bytes). Both have this SHA-256:
 
 ```text
 EA7C02F32250BB4B531F655538F4EBD46550345D44B9EF37CDD9E0935D688E8B
 ```
 
-The checksum identifies the reviewed source; it does not establish permission to publish it. Temporary local extraction dependencies were removed after use. The source PDF was not modified.
+The checksum identifies the reviewed source; publication permission comes from the owner's explicit request on 31 October 2026, not from the checksum. The PDF is not redacted or regenerated: its phone number, client names, figures, and other original content are publicly accessible. Temporary local extraction dependencies were removed after use.
 
 Page references below refer to the original PDF. Rewording must preserve meaning. No production deployment has been authorized.
 
-## Public-copy inventory
+## Webpage-copy inventory
 
 | Displayed claim or group                                                                                                                                                         | Source                                                                            | Publication treatment                                                                                                                                                                       |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -44,22 +44,22 @@ These are descriptive labels for professional work already in the resume, not in
 
 No public repositories, live demos, system diagrams, screenshots, users, traffic, or business metrics were provided. Accordingly, the site must not expose "View source" or "Live demo" actions for these projects. Internal detail pages are real routes containing only high-level resume-backed contributions.
 
-## Owner confirmation before public use
+## Owner confirmation before website deployment
 
 - [ ] Review and approve the public professional email, broad location, and employer descriptions.
 - [ ] Confirm the current role is still current. The supplied dates share transition months (Feb 2026, Jun 2024, Sep 2022); no days are given, so the site must not imply gaps or overlaps.
 - [ ] Confirm the resume-provided LinkedIn profile opens and belongs to the intended public identity. Automated access was blocked.
-- [ ] Approve a specific PDF for public download. The supplied original contains a phone number; it is intentionally not distributed. Do not silently redact or replace it with a generated resume.
+- [x] Approve the supplied original PDF for public download and source publication. The owner explicitly requested this on 31 October 2026; its original contents, including the phone number, are retained.
 - [ ] Confirm permission before adding client names, proprietary details, project screenshots, or quantified impact.
-- [ ] Supply an exact GitHub URL and public repositories only if desired. None are guessed.
+- [x] Confirm the public portfolio source repository: https://github.com/vinakumar/vinay-portfolio. This is not a source repository for any employer project.
 - [ ] Confirm a real production domain before enabling canonical links, social-image URLs, a sitemap, and indexing.
 - [ ] If independent verification is desired, provide public credential links. Current certificates are resume-supported, not independently credential-verified.
 
-These approval gates do not prevent local use. The default build must remain fully navigable and honest without downloads or external services.
+These website-deployment gates do not make the GitHub repository or PDF private. The current build supports real downloads without external services; the original email-request fallback remains available if the PDF is intentionally withdrawn from a future build.
 
-## Intentionally omitted information
+## Information omitted from webpage copy
 
-Phone number, original PDF, named clients, payment-provider identifiers, marks, performance percentages and workflow time reductions, private infrastructure, speculative architecture, unprovided photos, unprovided GitHub handles, testimonials, personal projects, availability claims, and aggregate years/skills scores.
+Phone number, named clients, payment-provider identifiers, marks, performance percentages and workflow time reductions, private infrastructure, speculative architecture, unprovided photos, unprovided GitHub handles, testimonials, personal projects, availability claims, and aggregate years/skills scores. These editorial omissions apply to the webpage summaries, not to the separately approved, unchanged PDF.
 
 ## Verification boundaries
 

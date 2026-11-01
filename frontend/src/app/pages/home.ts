@@ -7,11 +7,21 @@ import { ExperienceSection } from '../sections/experience';
 import { Expertise } from '../sections/expertise';
 import { Icon } from '../shared/icon';
 import { ProjectCard } from '../shared/project-card';
+import { ResumeLink } from '../shared/resume-link';
 import { Seo } from '../shared/seo';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, Icon, ProjectCard, ExperienceSection, Expertise, About, Contact],
+  imports: [
+    RouterLink,
+    Icon,
+    ProjectCard,
+    ResumeLink,
+    ExperienceSection,
+    Expertise,
+    About,
+    Contact,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
   styleUrl: './home.scss',

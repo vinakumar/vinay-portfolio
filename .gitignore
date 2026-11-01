@@ -11,5 +11,6 @@ playwright-report/
 .DS_Store
 Thumbs.db
 
-# Public distribution of the original resume has not been approved.
+# Only the explicitly approved public resume may be committed.
 *.pdf
+!/frontend/public/resume/Vinay_Kumar_Resume.pdf

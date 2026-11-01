@@ -4,15 +4,15 @@
 
 The portfolio is built and verified locally. Its public source repository is https://github.com/vinakumar/vinay-portfolio. **No Cloudflare account, Pages project, domain, or website deployment has been created.** Hosting commands below are instructions for the owner after approving public website use; they were not executed as part of the implementation.
 
-Use **Cloudflare Pages static hosting**, with a prebuilt Direct Upload. This application needs neither Pages Functions nor Workers, a .NET runtime, a production Node server, a database, or an email provider. The documented Free-plan limits include 500 builds/month and 20,000 files; direct dashboard uploads are limited to 1,000 files, and each file must be at most 25 MiB. The verified local artifact contains 22 small files, well within those limits. Check the current plan/terms before creating resources.
+Use **Cloudflare Pages static hosting**, with a prebuilt Direct Upload. This application needs neither Pages Functions nor Workers, a .NET runtime, a production Node server, a database, or an email provider. The documented Free-plan limits include 500 builds/month and 20,000 files; direct dashboard uploads are limited to 1,000 files, and each file must be at most 25 MiB. The verified local artifact contains 23 small files, including the approved PDF, well within those limits. Check the current plan/terms before creating resources.
 
 Direct Upload projects cannot later switch to Git integration; a new project is required for that change. Choose Git integration up front only if automatic deployment is actually desired. Publishing the source repository does not automatically configure a hosting integration.
 
-## 1. Approve the content before any upload
+## 1. Approve the website content before deployment
 
 Review `content-verification.md`, especially the public email, city, employer contributions, current role, and source-provided LinkedIn URL. Its automated verification was blocked with HTTP 999. Do not add client details, performance figures, or public project links without evidence and permission.
 
-The original resume is not a deployment asset. Keeping `resume` null is a complete, supported configuration with a real email-request action.
+The original resume has been explicitly approved and is included as a deployment asset. Its unchanged contents, including the phone number, are public in the source repository. This separate PDF approval does not configure or authorize a website deployment.
 
 The default build is unindexed, but **noindex is not privacy protection**. A public preview is still public. Approval flags are local preflight checks, not authentication, a hosting restriction, or a guarantee of permission.
 
@@ -46,7 +46,7 @@ C:\Documents\vinay-portfolio\frontend\src\app\content\site-settings.json
 | `productionUrl`         | Set the exact, owned/assigned HTTPS origin. No path, credentials, query, or fragment. Do not use a fictitious example domain.                                        |
 | `publicContentApproved` | Set to `true` only after the owner approves the actual public content.                                                                                               |
 | `indexingEnabled`       | Set to `true` only when search indexing is wanted; it requires content approval and a production URL. Keep `false` for a deliberately unindexed public review build. |
-| `resume`                | Keep `null`, or follow the separate PDF approval instructions below.                                                                                                 |
+| `resume`                | Already configured for the explicitly approved original PDF. Follow the replacement/withdrawal instructions below before changing it.                                |
 
 There are no API URLs, SMTP secrets, database strings, or application runtime environment variables to configure. These JSON values are bundled publicly.
 
@@ -54,23 +54,25 @@ Canonical URLs and absolute social-image URLs use the configured origin. An appr
 
 If you choose a custom domain later, update the origin, rebuild, and redeploy; otherwise metadata still identifies the former origin.
 
-### Optional approved PDF
+### Approved PDF download
 
-Choose the exact PDF the owner authorizes for public distribution. Do not silently redact, regenerate, or substitute the supplied original. It contains a phone number and remains outside this project.
+On 31 October 2026 the owner explicitly requested publication of the supplied original PDF. Its byte-identical copy is `frontend\public\resume\Vinay_Kumar_Resume.pdf`; the source document outside the project remains unchanged. The PDF includes the original phone number and other original content, without redaction or regeneration.
 
-Copy the approved file into `frontend\public\resume` using a filename containing only letters, digits, underscores, and hyphens, with a lowercase `.pdf` extension. For a file actually named `Approved_Name.pdf`, the corresponding setting would be:
+The current `resume` object is:
 
 ```json
 {
-  "assetPath": "resume/Approved_Name.pdf",
-  "downloadName": "Approved_Name.pdf",
+  "assetPath": "resume/Vinay_Kumar_Resume.pdf",
+  "downloadName": "Vinay_Kumar_Resume.pdf",
   "publicUseApproved": true
 }
 ```
 
-This object replaces the `resume: null` value; it is not the entire settings file. `assetPath` is a web URL path, while the physical file is `frontend\public\resume\Approved_Name.pdf`. The example name is not a supplied or generated resume.
+`assetPath` is a web URL path, not a filesystem path. The file is served from `/resume/Vinay_Kumar_Resume.pdf` on the same origin as the website. Native download links in the hero and About sections work without JavaScript and suggest the configured filename.
 
-The build rejects missing, unapproved, incorrectly named, and non-PDF-signature assets, along with any other PDF in `public`. The UI separately checks approval before offering a download. Rebuild and run the tests after enabling it, then manually open the actual download and verify the content. The implementation did not enable or publish any PDF.
+For a replacement, obtain approval for the exact new PDF, copy it into `frontend\public\resume`, and keep the filename/settings/narrow `.gitignore` exception consistent. Filenames allow only letters, digits, underscores, and hyphens followed by lowercase `.pdf`. Remove the superseded public PDF; the build rejects missing, unapproved, incorrectly named, and non-PDF-signature assets, along with any other PDF in `public`. Rebuild and verify the actual downloaded bytes and content after every replacement.
+
+To withdraw the download from a future build, remove the public asset and set `resume` to `null`, then rebuild; the component restores the email-request fallback. Merely changing the UI or approval flag does not make an existing file private. Published Git history and other people's copies are not erased by this change.
 
 ## 4. Run the release checks and inspect the artifact
 
@@ -91,9 +93,9 @@ Upload **only**:
 C:\Documents\vinay-portfolio\frontend\dist\vinay-portfolio\browser
 ```
 
-It must contain `index.html`, four `work` route directories, `not-found\index.html`, `404.html`, `_headers`, `robots.txt`, hashed JS/CSS/fonts, original favicon/social artwork, `3rdpartylicenses.txt`, and both font-license directories. An indexing-enabled release also contains the sitemap. A PDF appears only when separately approved.
+It must contain `index.html`, four `work` route directories, `not-found\index.html`, `404.html`, `_headers`, `robots.txt`, hashed JS/CSS/fonts, original favicon/social artwork, `3rdpartylicenses.txt`, and both font-license directories. The current configuration also includes the approved `resume\Vinay_Kumar_Resume.pdf`. An indexing-enabled release also contains the sitemap.
 
-Do not upload `dist\vinay-portfolio\server`, the entire Angular workspace, `node_modules`, private source files, or the original resume. There is no production server startup command.
+Do not upload `dist\vinay-portfolio\server`, the entire Angular workspace, `node_modules`, private source files, or unrelated/unapproved documents. There is no production server startup command.
 
 ## 5. Upload the finalized directory
 
@@ -133,12 +135,13 @@ curl.exe -I "$origin/"
 curl.exe -I "$origin/work/ticketing-and-identity"
 curl.exe -I "$origin/this-page-does-not-exist"
 curl.exe -I "$origin/3rdpartylicenses.txt"
+curl.exe -I "$origin/resume/Vinay_Kumar_Resume.pdf"
 curl.exe "$origin/robots.txt"
 ```
 
 Confirm HTTPS and the security headers on real responses, successful homepage/deep links, HTTP 404 for the missing path, and available license assets. Allow for the host's normal canonical-path redirects. If indexing is enabled, inspect `sitemap.xml`, canonical URLs, and the absolute social image. Verify unknown pages remain noindex.
 
-In real desktop/mobile browsers, check navigation, layout, fonts, keyboard focus, email targets, clipboard behavior, LinkedIn, social preview, console/network errors, and the optional actual PDF. A mailto link only opens an email client; it does not prove delivery. Recheck behavior under the host's CSP, not only the development server.
+In real desktop/mobile browsers, check navigation, layout, fonts, keyboard focus, email targets, clipboard behavior, LinkedIn, social preview, console/network errors, and the actual PDF download from both entry points. Confirm HTTP 200, `application/pdf`, the suggested filename, and unchanged contents. A mailto link only opens an email client; it does not prove delivery. Recheck behavior under the host's CSP, not only the development server.
 
 No deployed-host, DNS, TLS-certificate, search-indexing, or real email-delivery verification has yet occurred.
 
@@ -152,17 +155,17 @@ For future changes: update evidence-backed content, run `release:check` and `ver
 
 ## Troubleshooting
 
-| Symptom                         | Action                                                                                                        |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Publication preflight refuses   | Review the approval/domain message; do not bypass it or upload private content.                               |
-| Resume build check fails        | Confirm explicit file approval, safe names, the exact existing PDF, and no stray PDFs in `public`.            |
-| Browser test executable missing | Run `npx playwright install chromium`; follow the root README's trusted-CA note if needed.                    |
-| Port 4173 already in use        | Stop the preview you started before the browser suite; do not terminate unrelated processes.                  |
-| Deep links return the homepage  | Verify the complete route directories and real `404.html`; remove any unintended SPA catch-all host override. |
-| CSP errors after rebuilding     | Restart a local preview, or deploy the complete fresh artifact. Check for host-side HTML/script rewriting.    |
-| Fonts/licenses missing          | Use `npm run build` and upload the complete browser directory, including `media` and `licenses`.              |
-| Wrong canonical/social URL      | Correct `productionUrl`, rebuild, and redeploy. Do not edit generated HTML by hand.                           |
-| Custom domain returns 522       | Associate the domain with Pages before configuring its CNAME, then complete provider verification.            |
+| Symptom                         | Action                                                                                                                      |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Publication preflight refuses   | Review the approval/domain message; do not bypass it or upload private content.                                             |
+| Resume build check fails        | Confirm explicit file approval, safe names, the exact existing PDF, and no stray PDFs in `public`.                          |
+| Browser test executable missing | Run `npx playwright install chromium`; follow the root README's trusted-CA note if needed.                                  |
+| Port 4173 already in use        | Choose an unused `PORT` for the preview/browser suite, or stop only your own preview; do not terminate unrelated processes. |
+| Deep links return the homepage  | Verify the complete route directories and real `404.html`; remove any unintended SPA catch-all host override.               |
+| CSP errors after rebuilding     | Restart a local preview, or deploy the complete fresh artifact. Check for host-side HTML/script rewriting.                  |
+| Fonts/licenses missing          | Use `npm run build` and upload the complete browser directory, including `media` and `licenses`.                            |
+| Wrong canonical/social URL      | Correct `productionUrl`, rebuild, and redeploy. Do not edit generated HTML by hand.                                         |
+| Custom domain returns 522       | Associate the domain with Pages before configuring its CNAME, then complete provider verification.                          |
 
 ## Official sources checked
 

@@ -1,5 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const port = Number(process.env['PORT'] ?? 4173);
+if (!Number.isInteger(port) || port < 1 || port > 65535) {
+  throw new Error('PORT must be an integer between 1 and 65535.');
+}
+const baseURL = `http://127.0.0.1:${port}`;
+
 export default defineConfig({
   testDir: 'e2e',
   outputDir: 'test-results',
@@ -10,7 +16,7 @@ export default defineConfig({
   timeout: 30_000,
   reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]],
   use: {
-    baseURL: 'http://127.0.0.1:4173',
+    baseURL,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
@@ -26,9 +32,9 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npm run preview',
-    url: 'http://127.0.0.1:4173',
+    url: baseURL,
     timeout: 30_000,
     reuseExistingServer: false,
-    env: { PORT: '4173' },
+    env: { PORT: String(port) },
   },
 });

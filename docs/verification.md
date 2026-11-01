@@ -2,24 +2,27 @@
 
 ## Final result - 31 October 2026
 
-The implemented portfolio passed the complete `npm run verify` gate against its finalized production build. **47 automated tests passed: 18 Angular, 7 Node tooling, and 22 Chromium browser tests.** There are no remaining failing application tests or known build/lint/type failures in this handover.
+The implemented portfolio, including the approved original-PDF downloads, passed the complete `npm run verify` gate against its finalized production build. **48 automated tests passed: 18 Angular, 7 Node tooling, and 23 Chromium browser tests.** There are no remaining failing application tests or known build/lint/type failures in this handover.
 
-| Check actually executed                       | Result                                                                                                                                    |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run lint`                                | Passed Angular/TypeScript/template linting.                                                                                               |
-| `npm run format:check`                        | Passed configured frontend formatting.                                                                                                    |
-| `npm run typecheck`                           | Passed strict application, Angular-test, and Playwright TypeScript configurations.                                                        |
-| `npm test`                                    | 7 files, 18 tests passed with Angular TestBed/Vitest.                                                                                     |
-| `npm run test:tooling`                        | 7 Node tests passed.                                                                                                                      |
-| `npm run build`                               | Passed; six routes prerendered, seven finalized HTML documents including the real 404.                                                    |
-| `npm run test:e2e`                            | 22 tests passed, two Chromium workers, zero retries or skipped tests. Final run: 22.8 seconds.                                            |
-| `npm audit --audit-level=low`                 | Zero known vulnerabilities in the full dependency graph.                                                                                  |
-| `npm audit --omit=dev --audit-level=low`      | Zero known runtime-dependency vulnerabilities.                                                                                            |
-| `npm start` and an HTTP readiness request     | Actual portfolio homepage returned HTTP 200 from `http://127.0.0.1:4200/`. The temporary development server was stopped.                  |
-| `npm run release:check` with current defaults | Correctly refused unapproved content and the missing production origin. This is expected safety behavior, not an unresolved test failure. |
-| Final browser artifact inventory              | 22 files, 671,877 bytes in aggregate; seven HTML documents, zero PDFs, zero source maps, no starter favicon or unused CSR fallback.       |
+| Check actually executed                       | Result                                                                                                                                                 |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `npm run lint`                                | Passed Angular/TypeScript/template linting.                                                                                                            |
+| `npm run format:check`                        | Passed configured frontend formatting.                                                                                                                 |
+| `npm run typecheck`                           | Passed strict application, Angular-test, and Playwright TypeScript configurations.                                                                     |
+| `npm test`                                    | 7 files, 18 tests passed with Angular TestBed/Vitest.                                                                                                  |
+| `npm run test:tooling`                        | 7 Node tests passed.                                                                                                                                   |
+| `npm run build`                               | Passed; six routes prerendered, seven finalized HTML documents including the real 404.                                                                 |
+| `npm run test:e2e`                            | 23 tests passed, two Chromium workers, zero retries or skipped tests. Final run: 25.1 seconds.                                                         |
+| `npm audit --audit-level=low`                 | Zero known vulnerabilities in the full dependency graph.                                                                                               |
+| `npm audit --omit=dev --audit-level=low`      | Zero known runtime-dependency vulnerabilities.                                                                                                         |
+| `npm start` and an HTTP readiness request     | Actual portfolio homepage returned HTTP 200 from `http://127.0.0.1:4200/`. The temporary development server was stopped.                               |
+| `npm run release:check` with current defaults | Correctly refused unapproved content and the missing production origin. This is expected safety behavior, not an unresolved test failure.              |
+| Final browser artifact inventory              | 23 files, 743,784 bytes in aggregate; seven HTML documents, one approved 70,810-byte PDF, zero source maps, no starter favicon or unused CSR fallback. |
+| Original/public/build PDF integrity           | All three files have SHA-256 `EA7C02F32250BB4B531F655538F4EBD46550345D44B9EF37CDD9E0935D688E8B`; the supplied original is unchanged.                   |
 
 The commands were run in `C:\Documents\vinay-portfolio\frontend`. Node.js 24.19.0 and npm 12.0.2 were used. Angular runtime/compiler is 22.2.4, CLI/build/SSR is 22.2.5, and TypeScript is 6.0.3.
+
+An existing process occupied port 4173 during the first browser-stage attempt. The test runner now accepts the same optional `PORT` as the static preview, with all journeys using that configured origin. The successful full gate used an isolated loopback port (64744), left the existing process untouched, and stopped its own preview afterward. The dependency graph was unchanged; the audit results above are from the earlier same-day checks.
 
 ## Behavior covered
 
@@ -47,23 +50,24 @@ The suite uses Playwright 1.64.1 with its own Chromium, Chrome for Testing 156.0
 - All four project URLs, direct loading, reloads, metadata, 320px detail layout, project cards, next-project links, history, and return links.
 - A genuinely aborted lazy project-script request followed by an accessible full-document reload after network recovery.
 - The source-backed email and LinkedIn link targets, actual clipboard write/read, and a denied clipboard operation without false success.
-- The current honest resume-request behavior, with conditional browser coverage ready for an explicitly configured real PDF.
+- Real PDF downloads from both the hero and About at 320px and 1440px, correct HTTP status/MIME type/filename, and downloaded bytes identical to the approved public asset. The email-request action is absent in this approved configuration.
+- Keyboard-activated PDF download with JavaScript disabled and a mobile touch download, alongside the existing native-navigation and mobile-menu journeys.
 - Reduced motion and usable prerendered content/native links with JavaScript disabled.
 - Unknown routes, unknown project slugs, and missing assets returning usable HTTP 404s without hydration exceptions.
 - Served CSP/security/robots rules, social image, favicon, self-hosted fonts, vendor/font notices, and sensible rendering metrics.
 
 ## Visual review and performance
 
-Full-page screenshots were generated at all five requested widths. Desktop and mobile homepage images, the desktop project detail page, and the actual social PNG were inspected. The review considered text hierarchy, wrapping, spacing, controls, navigation, reading order, and the original paper/green visual system.
+Full-page screenshots were generated at all five requested widths. The updated 375px and 1440px hero images were inspected for download-link placement, wrapping, spacing, and preservation of the work/experience actions. The earlier full-portfolio review also inspected the desktop project detail page and actual social PNG. The original paper/green visual system is retained.
 
-The final initial JS/CSS bundle is **332.68 kB raw**, with an Angular CLI **89.44 kB estimated compressed transfer**. The project-detail lazy chunk is 8.96 kB raw. The initial warning/error budgets are 350/450 kB; no budget warning or error was emitted. These figures exclude HTML, fonts, and other assets and are not a total page-weight measurement.
+The final initial JS/CSS bundle is **332.83 kB raw**, with an Angular CLI **89.52 kB estimated compressed transfer**. The project-detail lazy chunk is 8.96 kB raw. The initial warning/error budgets are 350/450 kB; no budget warning or error was emitted. These figures exclude HTML, fonts, the PDF, and other assets and are not a total page-weight measurement.
 
 The final local rendering sample recorded:
 
 | Local measurement        | Observed value       |
 | ------------------------ | -------------------- |
 | Cumulative Layout Shift  | 0.005406837203414352 |
-| Largest Contentful Paint | 196 ms               |
+| Largest Contentful Paint | 144 ms               |
 | DM Sans loaded           | true                 |
 | IBM Plex Mono loaded     | true                 |
 
@@ -78,7 +82,7 @@ npm run verify
 npx playwright show-report
 ```
 
-Close the report viewer with `Ctrl+C` when done. Reports and screenshots are generated output and are intentionally ignored by source control.
+Set an unused terminal-local `PORT` first if the default 4173 is occupied; the tests do not reuse another preview. Close the report viewer with `Ctrl+C` when done. Reports and screenshots are generated output and are intentionally ignored by source control.
 
 Useful current artifacts:
 
@@ -116,7 +120,7 @@ Unused scaffold UI, Express/server entry, Angular Forms, starter icon, misleadin
 ## Explicitly unverified or intentionally absent
 
 - No public deployment, actual host/DNS/TLS verification, search-indexing result, social-network scrape, or Cloudflare account/resource operation.
-- No original or replacement PDF published. Positive link/validation behavior is unit-tested, but the real original-PDF download is disabled and therefore not exercised.
+- The approved original PDF is downloadable locally and included in the public source repository; its eventual website-host response/caching behavior remains unverified until deployment.
 - No real email sent, mailbox ownership established, or delivery confirmed. Contact is intentionally a mailto/clipboard flow, not an API.
 - LinkedIn's exact source URL was checked against the PDF, but automated access returned HTTP 999; public availability requires the owner's browser review.
 - Certifications and employment are resume-backed, not independently verified with employers or credential issuers. The current role needs owner confirmation before public use.

@@ -2,5 +2,9 @@
   "productionUrl": null,
   "publicContentApproved": false,
   "indexingEnabled": false,
-  "resume": null
+  "resume": {
+    "assetPath": "resume/Vinay_Kumar_Resume.pdf",
+    "downloadName": "Vinay_Kumar_Resume.pdf",
+    "publicUseApproved": true
+  }
 }

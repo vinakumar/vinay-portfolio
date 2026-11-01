@@ -3,14 +3,15 @@
 ## Discovery - 31 October 2026
 
 - Destination: `C:\Documents\vinay-portfolio`. The parent contains unrelated work; this new directory isolates the portfolio.
-- Source: the two-page `Vinay_Kumar_Resume.pdf` supplied by the owner. Extracted locally, including its embedded LinkedIn URL. The source PDF is not copied into this project.
+- Source: the two-page `Vinay_Kumar_Resume.pdf` supplied by the owner. Extracted locally, including its embedded LinkedIn URL. It was initially excluded; the owner's subsequent explicit download/publication request authorized an unchanged copy in public assets.
 - Verified career scope: Senior Software Engineer at Giesecke+Devrient, Senior Engineer I at Ticketmaster, Product Engineer at Smart Energy Water, and Software Engineer at Capgemini.
 - Professional focus: C#/.NET, APIs, distributed systems, data access, messaging, cloud delivery, frontend applications, testing, and production diagnosis.
 - Installed tools: Node.js 24.19.0, npm 12.0.2, .NET SDKs 8.0.427, 9.0.123, 10.0.303 and 10.0.403. Latest installed .NET runtime: 10.0.14. Microsoft Edge is installed, but administrator policy blocked its automation. Browser testing used Playwright's separate Chromium without changing that policy.
 - Registry stable releases checked: Angular core 22.2.4, Angular CLI/build/SSR 22.2.5. Node 24.19.0 satisfies their `^24.15.0` range; Angular build requires TypeScript `>=6.0 <6.1`. The implementation uses TypeScript 6.0.3 and no prerelease framework packages.
+- Release recheck on 31 October 2026: the Angular versions still match the latest stable tags. Node 26.13.0 is the latest LTS, and 24.22.2 is the latest Node 24 patch. The existing verified Node 24.19.0 runtime was retained, not represented as the latest Node release.
 - Microsoft's support table identifies .NET 10 as the current stable LTS release, supported through 14 November 2028. No .NET application is needed for the selected scope.
 - Reference repository inspected: `emmabostian/developer-portfolios`, README revision `fa83a75e4b1d21ef681c9ed4d3467e91f635dca5`. Three linked portfolios were fetched; observations and limitations are in `design-decisions.md`.
-- No production domain, GitHub profile, approved downloadable resume, email-delivery credentials, or public project repositories were provided.
+- At initial discovery, no production domain, GitHub profile, approved downloadable resume, email-delivery credentials, or public employer-project repositories were provided. The owner later confirmed the GitHub account and explicitly approved the supplied PDF.
 
 ## Product scope and information architecture
 
@@ -18,7 +19,9 @@ The homepage is a concise engineering portfolio: hero, selected professional wor
 
 Contact uses the professional email address present in the resume, a copy-email action with honest clipboard feedback, and the exact resume-provided LinkedIn link. A `mailto:` link opens the visitor's email application; it does not submit or claim to deliver a message.
 
-The original resume contains a phone number and has not been explicitly approved for public distribution. It is excluded from assets and source control. The interface offers a resume request rather than a dead download. A typed, disabled-by-default public-resume setting allows the owner to add the exact approved PDF later; the build must reject an enabled download with a missing file.
+The owner explicitly approved the original resume for public distribution on 31 October 2026. An unchanged copy is kept at `frontend\public\resume\Vinay_Kumar_Resume.pdf`; the original phone number and other PDF contents are consequently public. The shared resume component provides native, same-origin downloads in the hero and About sections, including before hydration or with JavaScript disabled. The hero keeps its existing work/experience links and gives recruiters an early download entry point; About retains the action next to professional background.
+
+Typed settings retain explicit PDF approval. The build rejects missing, unapproved, or invalid assets; removing the approved file and setting `resume` to `null` restores the honest email-request fallback. Removing a local file does not erase public copies or Git history.
 
 ## Backend decision
 
@@ -58,10 +61,10 @@ Final execution evidence is in `verification.md`; operational publication steps 
 - axe-core WCAG 2.2 AA checks plus keyboard/focus and responsive geometry inspection. Automated checks are not a complete accessibility certification.
 - Every specified viewport must have no horizontal overflow, overlap, or clipped primary actions.
 - Unknown paths/assets must return a real 404 rather than a successful HTML response.
-- No downloadable private PDF, phone number, unsupported professional statistics, fake project links, internal company URLs, or secrets in production output.
+- Only the exact owner-approved PDF may be included in public assets and downloaded. Webpage summaries continue omitting phone/client details and unsupported statistics; no fake project links, internal infrastructure URLs, or secrets are added.
 - Prerendered HTML must contain real page text; production build, strict type checks, lint, formatting, and meaningful tests must pass.
 - Owner can install, run, test, preview, and build using exact documented commands, with no external credentials.
-- Deployment is prepared, not executed. Public resume approval, public-content review, and a real production domain remain explicit publication steps.
+- Website deployment is prepared, not executed. PDF approval is recorded separately; website-content review and a real production domain remain explicit deployment steps.
 
 ## Deployment outline
 
@@ -72,6 +75,7 @@ Security headers and a static 404 page travel with the build. Use HTTPS, short-l
 ## Sources
 
 - https://angular.dev/reference/versions
+- https://nodejs.org/dist/index.json
 - https://angular.dev/cli/new
 - https://angular.dev/guide/testing
 - https://angular.dev/guide/ssr

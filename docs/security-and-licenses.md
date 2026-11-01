@@ -2,7 +2,7 @@
 
 ## Implemented boundary
 
-This is a static public-portfolio application, currently used only locally. There is no authentication, message-submission API, database, SMTP integration, analytics, tracking cookie, or application-owned message store.
+This is a static portfolio application. The website has not been deployed, but the source repository and explicitly approved resume PDF are public. There is no authentication, message-submission API, database, SMTP integration, analytics, tracking cookie, or application-owned message store.
 
 The only outbound contact actions are explicit user-initiated email/LinkedIn links. Normal page rendering uses local assets; the production browser tests found no external rendering requests. Hosting providers and external destinations have their own policies and may keep access logs.
 
@@ -10,9 +10,10 @@ All frontend code and build configuration shipped to a browser are readable. Pub
 
 ## Content and resume protection
 
-- The original resume and phone number are excluded from source/public assets and the browser distribution.
-- Public copy omits named clients, internal infrastructure, provider identifiers, detailed performance figures, and unprovided personal information.
-- The default resume control requests a copy by email, without pretending that a PDF exists or that mail was sent.
+- The owner explicitly approved the unchanged original resume for download and public source publication. Its phone number and other original PDF contents are therefore public.
+- Webpage summaries still omit phone/client details, internal infrastructure, provider identifiers, detailed performance figures, and unprovided personal information. These omissions do not redact the approved PDF.
+- The hero and About controls download the same local PDF without an external storage service, backend, or JavaScript requirement. The email-request fallback remains for a build without a public PDF.
+- Git ignores other PDFs by default, with one exception for the approved asset. Removing a download link, asset, or approval flag later does not erase already published copies or Git history.
 - An enabled download requires explicit file approval, a safe local PDF name, a matching existing asset, and a PDF signature. Other PDFs in `public` fail the build. Symbolic links in publication assets are rejected.
 - The release preflight requires public-content approval and a real HTTPS-origin setting. Indexing additionally requires both.
 - Owner review remains essential: a boolean cannot prove permission, current employment, external-link availability, or that a PDF contains no sensitive information. Signature checks are not a PDF malware/content sanitizer.

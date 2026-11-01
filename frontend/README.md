@@ -21,7 +21,7 @@ npx playwright install chromium
 npm run verify
 ```
 
-This runs lint, formatting, strict type checks, Angular/Vitest tests, Node tooling tests, the production build, and Playwright tests. Stop any manually started preview on port 4173 before running browser tests.
+This runs lint, formatting, strict type checks, Angular/Vitest tests, Node tooling tests, the production build, and Playwright tests. Browser tests manage their own preview on port 4173 by default; set `$env:PORT = '4174'` to an unused port if an existing preview must keep running.
 
 Individual suites are `npm test`, `npm run test:tooling`, and `npm run test:e2e`. The last requires a fresh production build and manages its own local preview. `ng e2e` is not configured.
 
@@ -40,6 +40,8 @@ Use the npm build wrapper rather than bare `ng build`: it runs the publication c
 
 Professional data: `src\app\content\portfolio.ts`. Public settings: `src\app\content\site-settings.json`. Shared design: `src\styles.scss`. Social image source: `public\social-preview.svg`; regenerate the PNG with `npm run social:render`.
 
-No backend or email credentials are required. The default resume action requests a copy by email; the original PDF is not included. Public content, a real domain, and any downloadable PDF require owner review. `npm run release:check` deliberately refuses the current unapproved settings.
+No backend or email credentials are required. The owner-approved original PDF is in `public\resume\Vinay_Kumar_Resume.pdf`; the hero and About sections offer a direct download, including without JavaScript. The PDF and its original contents are public in the source repository. Replace it only with an explicitly approved file and keep its settings/Git ignore exception consistent.
+
+Website-content approval and a real production domain are still required. `npm run release:check` deliberately refuses those unset website settings; PDF approval does not deploy the site or enable indexing. The root README records the current Angular/Node release comparison.
 
 Source repository: https://github.com/vinakumar/vinay-portfolio. The website has not been deployed. Follow `C:\Documents\vinay-portfolio\docs\deployment.md` before uploading the built site to a web host.

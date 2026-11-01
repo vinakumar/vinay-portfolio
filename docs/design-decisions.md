@@ -30,12 +30,13 @@ The research establishes content and interaction patterns, not a claim that refe
 - Single intentionally designed light theme with dark feature surfaces. No theme switcher: it would double presentation states without a user requirement.
 - Subtle entrance/hover motion only; reduced-motion preferences disable nonessential movement. Content never waits for an animation or intersection event to become readable.
 - Mobile navigation is a nonmodal disclosure, not a dialog. Native links, visible focus, Escape-to-close, and sensible focus return preserve keyboard behavior.
+- The approved PDF download appears in the hero for quick recruiter access and again in About beside the background details. Both use the same native download component and visible PDF label; existing work/experience actions remain, and the header is not crowded with another menu item.
 
 ## Deliberate omissions
 
 - No portrait was supplied: no fabricated avatar or stock portrait.
-- No GitHub profile or public source repositories were supplied: no fake social icon or source buttons.
+- No public employer-project repositories were supplied: no fake source/demo buttons. The separately confirmed portfolio repository does not establish source availability for professional projects.
 - No quantified hero statistics, availability status, endorsements, proficiency scores, or live activity.
 - The resume's client names and numerical performance claims are omitted from public project copy pending permission and measurement context.
-- The original PDF is withheld until explicit public-distribution approval. A resume request is a real contact action, not an imitation download.
+- PDF distribution was initially withheld. After explicit owner approval, the original is now a real download rather than an email request; the email fallback is retained for a future build that intentionally removes the public PDF.
 - No external trackers, contact database, paid integration, or cosmetic backend.
