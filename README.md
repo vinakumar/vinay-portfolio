@@ -166,4 +166,4 @@ C:\Documents\vinay-portfolio\frontend\dist\vinay-portfolio\browser
 
 The approved resume, security headers, 404, font licenses, and `3rdpartylicenses.txt` must travel with that directory. Do not upload the project root, unrelated/private documents, `node_modules`, Angular's `server` output, or a partial build.
 
-The remaining limitations are external/manual: no public-host verification, no real email sent, no independently verified LinkedIn/credentials, and no Safari, Firefox, physical-device, or screen-reader certification. Automated accessibility checks are valuable evidence, not complete WCAG certification.
+Vercel host checks passed on 1 November 2026 for the homepage, four project deep links, client navigation/focus, unchanged PDF downloads, assets, genuine 404s, and security headers. Remaining limitations include no real email sent, no independently verified LinkedIn/credentials, and no Safari, Firefox, physical-device, or screen-reader certification. Automated accessibility checks are valuable evidence, not complete WCAG certification.

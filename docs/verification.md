@@ -6,7 +6,13 @@ The reported public homepage was reproduced as a Vercel platform `404 NOT_FOUND`
 
 The existing complete `npm run verify` gate passed after this change: **49 tests (18 Angular, 8 Node tooling, 23 production Chromium)**, plus lint, formatting, strict type checks, and production build. The new tooling regression checks actual copied homepage/project/PDF files, matching generated CSP/noindex headers, explicit deep-link mapping, filesystem-first genuine 404 handling, exclusion of Cloudflare `_headers`, removal of obsolete output assets, and rejection of an unfinalized build.
 
-The Vercel packaging command was also run locally from the repository root. Real account-side deployment and HTTP/browser verification are separate from these local checks; see `deployment.md` for exact dashboard settings. No Vercel credentials, generated output, hosting functions, indexing enablement, or dependency changes are included.
+The Vercel packaging command was also run locally from the repository root: all 22 published static files matched the finalized browser build byte for byte; the Cloudflare-only `_headers` file was excluded. No Vercel credentials, generated output, hosting functions, indexing enablement, or dependency changes are included.
+
+After pushing fix commit `b8296eb`, Vercel's Git integration automatically deployed it successfully: https://vercel.com/vinakumars-projects-d299b306/vinay-portfolio/DSMYcE1TsKnPtAUSSY1EyazsWGmL. The previously failing https://vinay-portfolio-brown.vercel.app/ returned HTTP 200 with the actual portfolio.
+
+Live Chromium checks passed at 375px and 1440px with no overflow or axe violations in the tested homepage states. Downloads from both hero/About entry points matched the original PDF. All four direct project URLs returned HTTP 200; hydrated client navigation and heading focus worked; font/vendor/artwork assets were available; unknown pages/assets returned genuine 404s with the portfolio's custom not-found view; `_headers` and source settings were not exposed. Live CSP/nosniff/noindex headers were verified and browser page-error collection remained empty. Live screenshots were reviewed and retained outside the repository.
+
+The live smoke script initially checked a project title before navigation completed because the homepage also contains that title; it was corrected to wait for the route and level-one heading. Node HTTP checks needed process-local `NODE_USE_SYSTEM_CA=1` for the machine's trusted certificate store; TLS verification remained enabled. These were verification-script issues, not unresolved application failures.
 
 ## Final result - 31 October 2026
 
@@ -125,10 +131,10 @@ Playwright replaces the output for later runs. Run the complete suite rather tha
 
 Unused scaffold UI, Express/server entry, Angular Forms, starter icon, misleading generated editor tasks, and the unused CSR fallback were removed after checking their role. The finalized distribution retains required license notices.
 
-## Explicitly unverified or intentionally absent
+## Original handover boundaries (superseded where noted)
 
-- No public deployment, actual host/DNS/TLS verification, search-indexing result, social-network scrape, or Cloudflare account/resource operation.
-- The approved original PDF is downloadable locally and included in the public source repository; its eventual website-host response/caching behavior remains unverified until deployment.
+- Vercel deployment, HTTPS responses, page/asset routing, security headers, and downloads were subsequently verified as recorded above. No custom-domain/DNS administration, search-indexing result, social-network scrape, or Cloudflare account/resource operation was performed.
+- The approved original PDF was subsequently verified from both live download entry points, with original bytes and correct MIME type/filename.
 - No real email sent, mailbox ownership established, or delivery confirmed. Contact is intentionally a mailto/clipboard flow, not an API.
 - LinkedIn's exact source URL was checked against the PDF, but automated access returned HTTP 999; public availability requires the owner's browser review.
 - Certifications and employment are resume-backed, not independently verified with employers or credential issuers. The current role needs owner confirmation before public use.

@@ -68,7 +68,7 @@ Final execution evidence is in `verification.md`; operational publication steps 
 
 ## Deployment outline
 
-Recommend static Cloudflare Pages hosting, using only its static asset feature. Its documented Free plan currently permits 500 builds/month and 20,000 files; recheck limits before choosing a plan. A prebuilt direct upload avoids dependence on hosted build-runtime availability. No Cloudflare account, hosting resource, site upload, domain purchase, or website deployment has been performed. The separately authorized public source repository is https://github.com/vinakumar/vinay-portfolio.
+The original recommendation was static Cloudflare Pages with prebuilt Direct Upload; no Cloudflare resource or deployment was created. The owner subsequently selected Vercel. Explicit root/frontend configurations now package the same static Angular browser build into Build Output API v3 with actual CSP/security headers, prerendered URL mappings, filesystem assets, and genuine 404 fallback. Vercel deployed the fix automatically on 1 November 2026; live checks are recorded in `verification.md`. The public source repository is https://github.com/vinakumar/vinay-portfolio.
 
 Security headers and a static 404 page travel with the build. Use HTTPS, short-lived HTML caching, immutable fingerprinted assets, and rollback to a previous verified deployment. Once a real domain is approved, generate canonical URLs, social-image URLs, and a sitemap from that domain rather than inserting a fictitious address.
 

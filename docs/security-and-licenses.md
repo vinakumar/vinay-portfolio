@@ -2,7 +2,7 @@
 
 ## Implemented boundary
 
-This is a static portfolio application. The website has not been deployed, but the source repository and explicitly approved resume PDF are public. There is no authentication, message-submission API, database, SMTP integration, analytics, tracking cookie, or application-owned message store.
+This is a static portfolio application, deployed on Vercel at https://vinay-portfolio-brown.vercel.app/. The source repository and explicitly approved resume PDF are also public. There is no authentication, message-submission API, database, SMTP integration, analytics, tracking cookie, or application-owned message store.
 
 The only outbound contact actions are explicit user-initiated email/LinkedIn links. Normal page rendering uses local assets; the production browser tests found no external rendering requests. Hosting providers and external destinations have their own policies and may keep access logs.
 

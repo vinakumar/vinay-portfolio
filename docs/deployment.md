@@ -21,6 +21,8 @@ The versioned configurations override build/install/output/preset defaults. Root
 
 The packaging command emits `.vercel/output/config.json` and `.vercel/output/static` relative to the selected project root. It copies only finalized browser assets, translates the actual generated CSP/security headers, explicitly maps prerendered page URLs, checks static assets before the final HTTP 404 rule, and revalidates the non-fingerprinted PDF. Cloudflare's `_headers` file is not published as a file on Vercel. No blanket homepage rewrite is used, so missing pages and assets remain genuine 404s.
 
+**Verified result:** after pushing fix commit `b8296eb`, Vercel's Git integration deployed it automatically and the public homepage returned HTTP 200. Live desktop/mobile checks confirmed all four project URLs, client navigation, both original-PDF downloads, required assets, security headers, and the custom HTTP 404. No dashboard modification or manual redeployment was needed. The configuration table above remains guidance for future changes.
+
 Local reproduction from the repository root, using already installed dependencies:
 
 ```powershell
@@ -178,7 +180,7 @@ Confirm HTTPS and the security headers on real responses, successful homepage/de
 
 In real desktop/mobile browsers, check navigation, layout, fonts, keyboard focus, email targets, clipboard behavior, LinkedIn, social preview, console/network errors, and the actual PDF download from both entry points. Confirm HTTP 200, `application/pdf`, the suggested filename, and unchanged contents. A mailto link only opens an email client; it does not prove delivery. Recheck behavior under the host's CSP, not only the development server.
 
-No deployed-host, DNS, TLS-certificate, search-indexing, or real email-delivery verification has yet occurred.
+These Cloudflare-specific checks have not been run against a Cloudflare deployment. The owner's Vercel HTTPS/page/asset/header/download checks passed as recorded above; custom-domain/DNS administration, search indexing, and real email delivery remain outside that verification.
 
 ## Rollback and updates
 
