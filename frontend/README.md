@@ -44,4 +44,4 @@ No backend or email credentials are required. The owner-approved original PDF is
 
 Website-content approval and a real production domain are still required. `npm run release:check` deliberately refuses those unset website settings; PDF approval does not deploy the site or enable indexing. The root README records the current Angular/Node release comparison.
 
-Source repository: https://github.com/vinakumar/vinay-portfolio. The website has not been deployed. Follow `C:\Documents\vinay-portfolio\docs\deployment.md` before uploading the built site to a web host.
+Source repository: https://github.com/vinakumar/vinay-portfolio. The owner selected Vercel; `vercel.json` runs the finalized build and `node static-tools.mjs vercel` to package static assets, routes, and security headers. Either the repository root or `frontend` may be the Vercel Root Directory, using its matching configuration. See `C:\Documents\vinay-portfolio\docs\deployment.md` for exact settings and redeployment checks.

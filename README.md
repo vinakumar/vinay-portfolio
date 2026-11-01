@@ -1,6 +1,6 @@
 # Vinay Kumar - Engineering fieldnotes
 
-A complete, original Angular portfolio at `C:\Documents\vinay-portfolio`, built from the owner's supplied resume. **Website implemented and verified locally; not deployed.**
+A complete, original Angular portfolio at `C:\Documents\vinay-portfolio`, built from the owner's supplied resume. The owner has created a Vercel deployment; its build/output repair and exact settings are documented in `docs\deployment.md`.
 
 The warm paper, dark green, sage, and citron design uses editorial typography and original geometric artwork. It puts professional contributions ahead of decorative effects, with a readable single-column mobile layout.
 
@@ -125,7 +125,7 @@ Angular prerenders the homepage and project routes at build time, then hydrates 
 
 The lockfile pins the dependency graph. Build output, dependencies, test reports, and local/private files are ignored by source control. A narrow Git ignore exception permits only the approved resume PDF; Git attributes preserve LF text files and keep PNG/PDF assets binary.
 
-Source repository: [vinakumar/vinay-portfolio](https://github.com/vinakumar/vinay-portfolio). The source and approved PDF are public; the website itself has not been deployed.
+Source repository: [vinakumar/vinay-portfolio](https://github.com/vinakumar/vinay-portfolio). The source and approved PDF are public. Vercel website: https://vinay-portfolio-brown.vercel.app/ (deployment verification is recorded separately).
 
 ## Configuration and content editing
 
@@ -156,7 +156,7 @@ Noindex, robots rules, and approval flags are **not access control**. Never uplo
 
 ## Deployment and remaining owner actions
 
-The recommended deployment is **static Cloudflare Pages**, within its documented Free-plan limits, using a prebuilt Direct Upload. No paid service, hosting resource, account, or deployment was created.
+The owner's selected host is **Vercel**. Root and frontend `vercel.json` configurations build the correct Angular workspace and generate static Build Output API v3 assets, routes, and actual security headers. Follow the Vercel section in `docs\deployment.md`; the original Cloudflare Direct Upload instructions remain an alternative. No application backend or paid integration is needed.
 
 Before website deployment, complete the content/LinkedIn/current-role review, choose the real hosting origin, set the explicit public-content approval, and decide whether to enable search indexing. The approved resume is already included. Then follow `docs\deployment.md`, run the release preflight and full verification, and upload only:
 

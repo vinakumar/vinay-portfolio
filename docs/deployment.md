@@ -1,8 +1,43 @@
 # Deployment guide
 
-## Status and chosen host
+## Vercel deployment and 404 repair
 
-The portfolio is built and verified locally. Its public source repository is https://github.com/vinakumar/vinay-portfolio. **No Cloudflare account, Pages project, domain, or website deployment has been created.** Hosting commands below are instructions for the owner after approving public website use; they were not executed as part of the implementation.
+The owner created a Vercel project at https://vinay-portfolio-brown.vercel.app/. On 1 November 2026 its homepage returned Vercel's `404 NOT_FOUND`, despite a successful GitHub deployment status. The account-protected build logs were not available for inspection, so the exact dashboard settings could not be confirmed. The Angular workspace is under `frontend`, not the repository root.
+
+Both the repository root and `frontend` now contain a `vercel.json`. They explicitly select the static "Other" preset, install the frontend lockfile, run the finalized Angular build, and package Vercel Build Output API v3. This supports either of those two project-root selections without a root npm package or an application server.
+
+In **Vercel > vinay-portfolio > Settings > Build and Deployment**, use:
+
+| Setting          | Repository root (recommended)                                              | If Root Directory is `frontend`                 |
+| ---------------- | -------------------------------------------------------------------------- | ----------------------------------------------- |
+| Root Directory   | Leave empty / repository root                                              | `frontend`                                      |
+| Framework Preset | Other                                                                      | Other                                           |
+| Install Command  | `npm ci --prefix frontend`                                                 | `npm ci`                                        |
+| Build Command    | `npm --prefix frontend run build && node frontend/static-tools.mjs vercel` | `npm run build && node static-tools.mjs vercel` |
+| Output Directory | `.vercel/output`                                                           | `.vercel/output`                                |
+| Node.js Version  | `24.x`                                                                     | `24.x`                                          |
+
+The versioned configurations override build/install/output/preset defaults. Root Directory and Node.js Version are dashboard settings; do not select `src`, `public`, or a `dist` folder as the project root. Redeploy the **latest commit on `main`**, not an older deployment. If automatic Git deployment is disabled, select the latest deployment and **Redeploy** after the fix is pushed.
+
+The packaging command emits `.vercel/output/config.json` and `.vercel/output/static` relative to the selected project root. It copies only finalized browser assets, translates the actual generated CSP/security headers, explicitly maps prerendered page URLs, checks static assets before the final HTTP 404 rule, and revalidates the non-fingerprinted PDF. Cloudflare's `_headers` file is not published as a file on Vercel. No blanket homepage rewrite is used, so missing pages and assets remain genuine 404s.
+
+Local reproduction from the repository root, using already installed dependencies:
+
+```powershell
+Set-Location 'C:\Documents\vinay-portfolio'
+npm --prefix frontend run build
+node frontend\static-tools.mjs vercel
+```
+
+After deployment, confirm `/`, all four `/work/...` deep links, `/resume/Vinay_Kumar_Resume.pdf`, vendor/font assets, and a deliberately missing URL. The PDF must return `application/pdf` and match the approved source. Check actual security headers and browser hydration, not merely Vercel's "Ready" status.
+
+Website indexing remains disabled; this routing repair does not enable indexing or silently approve other content. Configure the real production origin and review the content before enabling canonical/indexing metadata. No Vercel token is included in the repository.
+
+Official references: https://vercel.com/docs/project-configuration/vercel-json and https://vercel.com/docs/build-output-api/configuration.
+
+## Alternative: Cloudflare Pages
+
+The portfolio is built and verified locally. Its public source repository is https://github.com/vinakumar/vinay-portfolio. No Cloudflare account, Pages project, or Cloudflare deployment has been created. The following is the original alternative-host guide, not a requirement to migrate away from Vercel.
 
 Use **Cloudflare Pages static hosting**, with a prebuilt Direct Upload. This application needs neither Pages Functions nor Workers, a .NET runtime, a production Node server, a database, or an email provider. The documented Free-plan limits include 500 builds/month and 20,000 files; direct dashboard uploads are limited to 1,000 files, and each file must be at most 25 MiB. The verified local artifact contains 23 small files, including the approved PDF, well within those limits. Check the current plan/terms before creating resources.
 

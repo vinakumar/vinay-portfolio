@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import {
   createCsp,
   createPreviewServer,
+  createVercelOutput,
   resolveAssetPath,
   validateResumeAssets,
   validateSettings,
@@ -134,6 +135,57 @@ test('static preview serves real routes, a real 404, HEAD, and no POST endpoint'
     if (server) {
       await new Promise((resolve) => server.close(resolve));
     }
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('Vercel output publishes finalized pages and PDF with headers, not an SPA catch-all', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'vinay-portfolio-vercel-'));
+  const source = join(directory, 'browser');
+  const output = join(directory, 'output');
+  try {
+    await mkdir(join(source, 'work', 'project'), { recursive: true });
+    await mkdir(join(source, 'resume'));
+    const home = '<h1>Home fixture</h1><script>window.example = true;</script>';
+    const csp = createCsp([home]);
+    await writeFile(
+      join(source, '_headers'),
+      `/*\n  Content-Security-Policy: ${csp}\n  X-Content-Type-Options: nosniff\n  X-Robots-Tag: noindex, nofollow\n\n/unused\n  Cache-Control: ignored\n`,
+    );
+    await writeFile(join(source, 'index.html'), home);
+    await writeFile(join(source, '404.html'), '<h1>Not found fixture</h1>');
+    await writeFile(join(source, 'work', 'project', 'index.html'), '<h1>Project fixture</h1>');
+    const pdf = Buffer.from('%PDF-1.7\nApproved fixture only.');
+    await writeFile(join(source, 'resume', 'Approved.pdf'), pdf);
+    await mkdir(join(output, 'static'), { recursive: true });
+    await writeFile(join(output, 'static', 'stale.js'), 'Superseded asset');
+    await createVercelOutput(source, output);
+
+    const config = JSON.parse(await readFile(join(output, 'config.json'), 'utf8'));
+    assert.equal(config.routes[0].headers['Content-Security-Policy'], csp);
+    assert.equal(config.routes[0].headers['X-Robots-Tag'], 'noindex, nofollow');
+    for (const [url, destination] of [
+      ['/', '/index.html'],
+      ['/work/project', '/work/project/index.html'],
+      ['/work/project/', '/work/project/index.html'],
+    ]) {
+      const route = config.routes.find((route) => route.dest && new RegExp(route.src).test(url));
+      assert.equal(route.dest, destination);
+      assert.equal(
+        await readFile(join(output, 'static', destination), 'utf8'),
+        await readFile(join(source, destination), 'utf8'),
+      );
+    }
+    assert.deepEqual(config.routes.slice(-2), [
+      { handle: 'filesystem' },
+      { src: '/.*', dest: '/404.html', status: 404 },
+    ]);
+    assert.deepEqual(await readFile(join(output, 'static', 'resume', 'Approved.pdf')), pdf);
+    await assert.rejects(readFile(join(output, 'static', '_headers')), { code: 'ENOENT' });
+    await assert.rejects(readFile(join(output, 'static', 'stale.js')), { code: 'ENOENT' });
+    await rm(join(source, '404.html'));
+    await assert.rejects(createVercelOutput(source, output), /finalized build/);
+  } finally {
     await rm(directory, { recursive: true, force: true });
   }
 });

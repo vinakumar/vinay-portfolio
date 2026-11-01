@@ -1,6 +1,16 @@
 import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { copyFile, readFile, readdir, realpath, stat, unlink, writeFile } from 'node:fs/promises';
+import {
+  copyFile,
+  mkdir,
+  readFile,
+  readdir,
+  realpath,
+  rm,
+  stat,
+  unlink,
+  writeFile,
+} from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { dirname, extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -242,9 +252,9 @@ const contentTypes = {
   '.xml': 'application/xml; charset=utf-8',
 };
 
-export async function createPreviewServer(directory = buildDirectory) {
+async function readStaticHeaders(directory) {
   const headerFile = await readFile(join(directory, '_headers'), 'utf8');
-  const headers = Object.fromEntries(
+  return Object.fromEntries(
     headerFile
       .split('\n\n')[0]
       .split('\n')
@@ -255,6 +265,64 @@ export async function createPreviewServer(directory = buildDirectory) {
         return [line.slice(0, colon).trim(), line.slice(colon + 1).trim()];
       }),
   );
+}
+
+export async function createVercelOutput(
+  directory = buildDirectory,
+  outputDirectory = resolve('.vercel', 'output'),
+) {
+  const headers = await readStaticHeaders(directory);
+  const files = await filesUnder(directory);
+  if (
+    !files.includes(join(directory, 'index.html')) ||
+    !files.includes(join(directory, '404.html'))
+  ) {
+    throw new Error('Vercel output requires a finalized build with a homepage and real 404.');
+  }
+  const staticDirectory = join(outputDirectory, 'static');
+  await rm(staticDirectory, { recursive: true, force: true });
+  await mkdir(staticDirectory, { recursive: true });
+  const htmlRoutes = [];
+  for (const file of files) {
+    const path = relative(directory, file).split(sep).join('/');
+    if (path === '_headers') continue;
+    const destination = join(staticDirectory, path);
+    await mkdir(dirname(destination), { recursive: true });
+    await copyFile(file, destination);
+    if (path === 'index.html' || path.endsWith('/index.html')) {
+      const route = `/${path.slice(0, -'index.html'.length).replace(/\/$/, '')}`;
+      htmlRoutes.push({
+        src: route === '/' ? '^/$' : `^${route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/?$`,
+        dest: `/${path}`,
+        headers: { 'Cache-Control': 'public, max-age=0, must-revalidate' },
+      });
+    }
+  }
+  const config = {
+    version: 3,
+    routes: [
+      { src: '/.*', headers, continue: true },
+      {
+        src: '^/.*-[A-Za-z0-9_-]{8}\\.(?:js|css|woff2?)$',
+        headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
+        continue: true,
+      },
+      {
+        src: '^/resume/.*\\.pdf$',
+        headers: { 'Cache-Control': 'public, max-age=0, must-revalidate' },
+        continue: true,
+      },
+      ...htmlRoutes,
+      { handle: 'filesystem' },
+      { src: '/.*', dest: '/404.html', status: 404 },
+    ],
+  };
+  await writeFile(join(outputDirectory, 'config.json'), `${JSON.stringify(config, null, 2)}\n`);
+  console.log('Prepared Vercel Build Output API v3: static pages, assets, headers, and real 404s.');
+}
+
+export async function createPreviewServer(directory = buildDirectory) {
+  const headers = await readStaticHeaders(directory);
   return createServer(async (request, response) => {
     const send = (status, body, type = 'text/plain; charset=utf-8', extra = {}) => {
       response.writeHead(status, {
@@ -354,6 +422,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     check: () =>
       loadSettings().then(() => console.log('Content settings and public-asset checks passed.')),
     finalize: finalizeBuild,
+    vercel: () => createVercelOutput(),
     serve,
     release: () =>
       loadSettings({ release: true }).then(() =>
@@ -364,7 +433,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   try {
     const command = commands[process.argv[2]];
     if (!command) {
-      throw new Error('Use check, finalize, serve, release, or social.');
+      throw new Error('Use check, finalize, vercel, serve, release, or social.');
     }
     await command();
   } catch (error) {

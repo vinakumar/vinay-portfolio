@@ -1,5 +1,13 @@
 # Verification record
 
+## Vercel repair - 1 November 2026
+
+The reported public homepage was reproduced as a Vercel platform `404 NOT_FOUND`, despite GitHub reporting a successful deployment. The private dashboard logs/settings were not accessible. Root and frontend `vercel.json` files now explicitly build the nested workspace and package the finalized browser output using Build Output API v3.
+
+The existing complete `npm run verify` gate passed after this change: **49 tests (18 Angular, 8 Node tooling, 23 production Chromium)**, plus lint, formatting, strict type checks, and production build. The new tooling regression checks actual copied homepage/project/PDF files, matching generated CSP/noindex headers, explicit deep-link mapping, filesystem-first genuine 404 handling, exclusion of Cloudflare `_headers`, removal of obsolete output assets, and rejection of an unfinalized build.
+
+The Vercel packaging command was also run locally from the repository root. Real account-side deployment and HTTP/browser verification are separate from these local checks; see `deployment.md` for exact dashboard settings. No Vercel credentials, generated output, hosting functions, indexing enablement, or dependency changes are included.
+
 ## Final result - 31 October 2026
 
 The implemented portfolio, including the approved original-PDF downloads, passed the complete `npm run verify` gate against its finalized production build. **48 automated tests passed: 18 Angular, 7 Node tooling, and 23 Chromium browser tests.** There are no remaining failing application tests or known build/lint/type failures in this handover.
